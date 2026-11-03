@@ -38,6 +38,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       'isCommunity': 'isCommunity',
+      'hideUpsells': 'hideUpsells',
     }),
     ...mapGetters(['onboardingNotyShown', 'connected']),
     /**
@@ -50,6 +51,9 @@ export default Vue.extend({
   },
   watch: {
     isCommunity() {
+      this.initNotifyInterval()
+    },
+    hideUpsells() {
       this.initNotifyInterval()
     },
     connected() {
@@ -71,7 +75,7 @@ export default Vue.extend({
         clearTimeout(this.timeoutID)
         this.timeoutID = null
       }
-      if (!this.isCommunity) {
+      if (!this.isCommunity || this.hideUpsells) {
         return
       }
 
@@ -84,7 +88,7 @@ export default Vue.extend({
       }, 1000 * 60 * 5)
     },
     notifyUpsell() {
-      if (this.isShowingOnboardingNoty || this.blockingDialog) {
+      if (this.isShowingOnboardingNoty || this.blockingDialog || this.hideUpsells) {
         return
       }
       new Noty(this.upsellNotificationOptions).show()

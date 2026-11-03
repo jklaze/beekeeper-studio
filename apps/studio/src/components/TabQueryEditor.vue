@@ -199,7 +199,7 @@
 
         <div class="actions primary-actions btn-group">
           <x-button
-            v-if="showDryRun"
+            v-if="showDryRun && !hideLockedFeatures"
             class="btn btn-flat btn-small dry-run-btn"
             :disabled="isCommunity"
             @click="dryRun = !dryRun"
@@ -278,8 +278,9 @@
                   <x-label>{{ runSecondaryText() }}</x-label>
                   <x-shortcut :value="displayShortcut('queryEditor.secondaryQueryAction')" />
                 </x-menuitem>
-                <hr>
+                <hr v-if="!hideLockedFeatures">
                 <x-menuitem
+                  v-if="!hideLockedFeatures"
                   @click.prevent="queryFunctions.primaryWrite"
                   :disabled="disableRunToFile || (primaryIsCurrent && runCurrentDisabled)"
                 >
@@ -293,6 +294,7 @@
                   </i>
                 </x-menuitem>
                 <x-menuitem
+                  v-if="!hideLockedFeatures"
                   @click.prevent="queryFunctions.secondaryWrite"
                   :disabled="disableRunToFile || (primaryIsTab && runCurrentDisabled)"
                 >
@@ -729,6 +731,7 @@ import { KeybindingPath } from '@/common/bksConfig/BksConfigProvider'
       ...mapGetters(['dialect', 'dialectData', 'defaultSchema', 'isCloud', 'aiShellAvailable']),
       ...mapGetters({
         'isCommunity': 'licenses/isCommunity',
+        'hideLockedFeatures': 'hideLockedFeatures',
         'userKeymap': 'settings/userKeymap',
       }),
       ...mapState(['usedConfig', 'connectionType', 'database', 'tables', 'storeInitialized', 'connection']),

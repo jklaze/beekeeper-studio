@@ -252,7 +252,7 @@
             <x-menuitem @click="showColumnFilterModal">
               <x-label>Hide columns ({{ hiddenColumnCount }})</x-label>
             </x-menuitem>
-            <x-menuitem @click="importTab" :disabled="dialectData?.disabledFeatures?.importFromFile || usedConfig.readOnlyMode">
+            <x-menuitem v-if="!$store.getters.hideLockedFeatures" @click="importTab" :disabled="dialectData?.disabledFeatures?.importFromFile || usedConfig.readOnlyMode">
               <x-label>
                 Import from file
                 <i
@@ -885,7 +885,7 @@ export default Vue.extend({
             this.openEditorMenu(cell),
             this.setAsNullMenuItem(ranges),
             { separator: true },
-            this.quickFilterMenuItem(cell),
+            ...(this.$store.getters.hideLockedFeatures ? [] : [this.quickFilterMenuItem(cell)]),
               ...copyActionsMenu({
                 tabulator: cell.getTable(),
                 table: this.table.name,

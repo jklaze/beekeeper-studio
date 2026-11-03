@@ -92,6 +92,10 @@ export default class WebPluginManager {
         log.info(`Plugin "${manifest.id}" is disabled. Skipping...`);
         continue;
       }
+      if (this.pluginStore.isPluginHidden(manifest.id)) {
+        log.info(`Plugin "${manifest.id}" needs a paid license. Skipping...`);
+        continue;
+      }
       try {
         await this.loadPlugin(snapshot);
       } catch (e) {

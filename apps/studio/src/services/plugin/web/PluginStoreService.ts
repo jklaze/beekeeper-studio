@@ -12,6 +12,7 @@ import { normalizeFilters } from "@/common/utils";
 import { AppEvent } from "@/common/AppEvent";
 import { ExtendedTableColumn, NgQueryResult } from "@/lib/db/models";
 import _ from "lodash";
+import { paidFeatureForPlugin } from "@/lib/paidFeatures";
 import { SidebarTab } from "@/store/modules/SidebarModule";
 import {
   Keybinding,
@@ -37,6 +38,11 @@ type Table = {
 /** An interface that bridges plugin system with Vuex and AppEvents. */
 export default class PluginStoreService {
   private tablesChangedListeners: Set<() => void> = new Set();
+
+  /** Paid first-party plugins are not loaded while community-enforced mode hides locked features. */
+  isPluginHidden(pluginId: string): boolean {
+    return !!this.store.getters.hideLockedFeatures && paidFeatureForPlugin(pluginId) !== null;
+  }
 
   constructor(
     private store: Store<RootState>,

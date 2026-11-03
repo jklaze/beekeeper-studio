@@ -3,7 +3,7 @@
     <div class="form-group col">
       <label for="authenticationType">Authentication Method</label>
       <select name="" v-model="authType" id="" :disabled="disabled">
-        <option :key="`${t.value}-${t.name}`" v-for="t in authTypes" :value="t.value" :selected="authType === t.value">
+        <option :key="`${t.value}-${t.name}`" v-for="t in visibleAuthTypes" :value="t.value" :selected="authType === t.value">
           {{ t.name }}
         </option>
       </select>
@@ -140,7 +140,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isCommunity']),
+    ...mapGetters(['isCommunity', 'hideLockedFeatures']),
+    visibleAuthTypes() {
+      if (!this.hideLockedFeatures || this.isCockroach) return this.authTypes
+      return this.authTypes.filter((t) => t.value === 'default' || t.value === this.authType)
+    },
     isCockroach() {
       return this.config.connectionType === 'cockroachdb'
     },

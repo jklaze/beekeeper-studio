@@ -147,6 +147,7 @@
         </div>
         <div class="vue-dialog-buttons">
           <button
+            v-if="!$store.getters.hideLockedFeatures"
             class="btn btn-flat"
             type="button"
             @click.prevent="importExportTables"

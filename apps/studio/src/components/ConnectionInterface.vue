@@ -254,18 +254,25 @@
               </div>
             </form>
           </div>
+          <div
+            v-if="shouldUpsell && hideUpsells"
+            class="alert alert-info"
+          >
+            <i class="material-icons">info</i>
+            <div>{{ friendlyConnectionType }} is not available in the Community Edition.</div>
+          </div>
           <upgrade-panel
-            v-if="shouldUpsell"
+            v-else-if="shouldUpsell"
             :feature-name="friendlyConnectionType"
             standalone
             class="connection-upgrade-panel"
           />
           <template v-if="!config.connectionType">
-            <div class="pitch" v-if="!isUltimate">
+            <div class="pitch" v-if="!isUltimate && !hideUpsells">
               🌟 <strong>Upgrade</strong> to access the JSON sidebar, AI shell, robust import/export and much more!
               <a href="https://beekeeperstudio.io/pricing" class="">Upgrade</a>.
             </div>
-            <div class="pitch" v-else-if="isTrial">
+            <div class="pitch" v-else-if="isTrial && !hideUpsells">
               🌟 <strong>Trial expires {{ $bks.timeAgo(trialLicense.validUntil) }}</strong> Upgrade now to make sure you
               don't lose access.
               <a href="https://beekeeperstudio.io/pricing" class="">Upgrade</a>.
@@ -362,7 +369,7 @@ export default Vue.extend({
     ...mapState(['username']),
     ...mapState('data/connections', { 'connections': 'items' }),
     ...mapState('data/connectionFolders', { connectionFolders: 'items' }),
-    ...mapGetters(['isUltimate', 'isCloud']),
+    ...mapGetters(['isUltimate', 'isCloud', 'hideUpsells']),
     ...mapGetters('licenses', ['isTrial', 'trialLicense']),
     ...mapGetters({
       privacyMode: 'settings/privacyMode'

@@ -7,10 +7,10 @@
         <option value="default">
           Username / Password
         </option>
-        <option value="windows">
+        <option v-if="!hideLockedFeatures || authType === 'windows'" value="windows">
           Kerberos / Windows (via ODBC)
         </option>
-        <option :key="`${t.value}-${t.name}`" v-for="t in authTypes" :value="t.value">
+        <option :key="`${t.value}-${t.name}`" v-for="t in visibleAuthTypes" :value="t.value">
           {{ t.name }}
         </option>
       </select>
@@ -241,6 +241,11 @@
     },
     computed: {
       ...mapState(['connection']),
+      ...mapGetters(['hideLockedFeatures']),
+      visibleAuthTypes() {
+        if (!this.hideLockedFeatures) return this.authTypes
+        return this.authTypes.filter((t) => t.value === this.authType)
+      },
       showPassword() {
         return this.authType === AzureAuthType.Password;
       }

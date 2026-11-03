@@ -3,7 +3,12 @@
     <span class="title">
       <i class="material-icons">stars</i> JSON Row Viewer
     </span>
-    <div class="body">
+    <div v-if="$store.getters.hideUpsells" class="body">
+      <p>
+        The JSON Row Viewer is not available in the Community Edition.
+      </p>
+    </div>
+    <div v-else class="body">
       <p>
         Upgrade required to use the JSON Row Viewer.
       </p>

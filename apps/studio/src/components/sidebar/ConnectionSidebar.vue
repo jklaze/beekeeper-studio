@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-wrap row">
-    <workspace-sidebar />
+    <workspace-sidebar v-if="!$store.getters.hideUpsells || isCloud" />
 
     <!-- QUICK CONNECT -->
     <div class="tab-content flex-col expand">

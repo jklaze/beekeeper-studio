@@ -308,6 +308,19 @@ const store = new Vuex.Store<State>({
     isCommunity(_state, _getters, _rootState, rootGetters) {
       return rootGetters['licenses/isCommunity']
     },
+    /**
+     * Community-enforced mode: no upgrade pop-ups, toasts, banners or buttons,
+     * and no cloud features. Applies while no paid license key is entered.
+     * Opt out with `hideUpsells = false` under [general] in user.config.ini.
+     */
+    hideUpsells(_state, _getters, _rootState, rootGetters) {
+      if (window.bksConfig?.general?.hideUpsells === false) return false
+      return (rootGetters['licenses/realLicenses'] || []).length === 0
+    },
+    /** Paid-only entry points (menu items, buttons) are hidden instead of opening an upgrade dialog. */
+    hideLockedFeatures(_state, getters) {
+      return getters.hideUpsells && getters.isCommunity
+    },
     isUltimate(_state, _getters, _rootState, rootGetters) {
       return rootGetters['licenses/isUltimate']
     },
@@ -520,11 +533,11 @@ const store = new Vuex.Store<State>({
       let title = config
         ? `${BeekeeperPlugin.buildConnectionName(config)} - Beekeeper Studio`
         : 'Beekeeper Studio'
-      if (context.getters.isTrial && context.getters.isUltimate) {
+      if (context.getters.isTrial && context.getters.isUltimate && !context.getters.hideUpsells) {
         const days = context.rootGetters['licenses/licenseDaysLeft']
         title += ` - Free Trial (${pluralize('day', days, true)} left)`
       }
-      if (context.getters.isCommunity) {
+      if (context.getters.isCommunity && !context.getters.hideUpsells) {
         title += ' - Free Version'
       }
       context.commit('updateWindowTitle', title)

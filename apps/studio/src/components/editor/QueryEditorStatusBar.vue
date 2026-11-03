@@ -172,6 +172,7 @@
           }"
         >
           <x-menuitem
+            v-if="!$store.getters.hideLockedFeatures"
             @click.prevent="$event => submitCurrentQueryToFile()"
             :disabled="!(result && result.truncated)"
           >
@@ -365,6 +366,7 @@ export default {
       })
     },
     canEdit() {
+      if (this.$store.getters.hideLockedFeatures) return false;
       return !this.dialectData?.disabledFeatures?.resultEditing;
     },
     editButtonTooltip() {

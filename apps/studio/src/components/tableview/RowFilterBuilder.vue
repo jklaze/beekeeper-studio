@@ -141,7 +141,10 @@
               >
                 <i class="material-icons">remove</i>
               </button>
-              <div class="btn-wrap add-filter">
+              <div
+                v-if="!(hideLockedFeatures && filters.length >= 2)"
+                class="btn-wrap add-filter"
+              >
                 <button
                   class="btn btn-flat btn-icon"
                   type="button"
@@ -220,6 +223,7 @@ export default Vue.extend({
     ...mapGetters(["dialectData", "minimalMode"]),
     ...mapGetters({
       isCommunity: "licenses/isCommunity",
+      hideLockedFeatures: "hideLockedFeatures",
     }),
     ...mapState(['connection']),
     additionalFilters() {

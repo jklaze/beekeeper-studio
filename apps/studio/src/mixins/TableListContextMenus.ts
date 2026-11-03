@@ -75,7 +75,7 @@ export default {
             this.trigger(AppEvent.beginExport, { table: item })
           }
         },
-        {
+        ...(this.$store.getters.hideLockedFeatures ? [] : [{
           name: "Import from File",
           class: disabled(dialect.disabledFeatures?.importFromFile, usedConfig.readOnlyMode),
           title: disabledTitle(dialectName, 'Import', !!dialect.disabledFeatures?.importFromFile, usedConfig.readOnlyMode),
@@ -84,7 +84,7 @@ export default {
           handler: ({ item }) => {
             this.trigger(AppEvent.beginImport, { table: item })
           }
-        },
+        }]),
         divider,
         {
           name: "Copy Name",

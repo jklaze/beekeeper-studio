@@ -142,6 +142,7 @@
                 </x-label>
               </x-menuitem>
               <x-menuitem
+                v-if="!$store.getters.hideLockedFeatures"
                 :disabled="tablesLoading || createDisabled"
                 @click.prevent="newTableFromFile"
                 :title="createDisabled ? `Creating tables is not supported for ${dialect}` : ''"

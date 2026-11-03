@@ -4,7 +4,7 @@
       <label for="authenticationType">Authentication Method</label>
       <!-- need to take the value -->
       <select name="" v-model="authType" id="" :disabled="disabled">
-        <option :key="`${t.value}-${t.name}`" v-for="t in authTypes" :value="t.value" :selected="authType === t.value">
+        <option :key="`${t.value}-${t.name}`" v-for="t in visibleAuthTypes" :value="t.value" :selected="authType === t.value">
           {{ t.name }}
         </option>
       </select>
@@ -69,7 +69,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isCommunity']),
+    ...mapGetters(['isCommunity', 'hideLockedFeatures']),
+    visibleAuthTypes() {
+      if (!this.hideLockedFeatures) return this.authTypes
+      return this.authTypes.filter((t) => t.value === 'default' || t.value === this.authType)
+    },
     showServerInputs() {
       return !this.azureAuthEnabled
     }

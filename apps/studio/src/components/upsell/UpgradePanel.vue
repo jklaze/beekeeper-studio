@@ -1,5 +1,20 @@
 <template>
   <div
+    v-if="hideUpsells"
+    class="upgrade-panel vue-dialog"
+    :class="{ 'upgrade-panel--standalone': standalone }"
+  >
+    <div class="dialog-content">
+      <h3 class="dialog-c-title">
+        {{ featureName ? `${featureName} is not available` : 'Not available' }}
+      </h3>
+      <p class="dialog-c-subtitle">
+        Not included in the Community Edition.
+      </p>
+    </div>
+  </div>
+  <div
+    v-else
     class="upgrade-panel vue-dialog"
     :class="{ 'upgrade-panel--standalone': standalone, 'upgrade-panel--wide': wide }"
   >
@@ -117,6 +132,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    hideUpsells(): boolean {
+      return this.$store.getters.hideUpsells
+    },
     features(): Feature[] {
       return PAID_FEATURES
     },

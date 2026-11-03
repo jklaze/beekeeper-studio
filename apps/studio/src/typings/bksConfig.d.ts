@@ -403,6 +403,7 @@ declare interface IBksConfig {
         checkForUpdatesDisabled: boolean;
         checkForUpdatesInterval: number;
         downloadUserAgent: string;
+        hideUpsells: boolean;
         workspaceSyncInterval: number;
     };
     keybindings: {

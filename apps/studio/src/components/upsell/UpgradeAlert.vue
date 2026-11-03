@@ -1,5 +1,11 @@
 <template>
-  <div class="alert upgrade-alert">
+  <div v-if="$store.getters.hideUpsells" class="alert upgrade-alert">
+    <i class="material-icons">info_outline</i>
+    <div class="alert-body">
+      {{ featureName }} is not available in the Community Edition
+    </div>
+  </div>
+  <div v-else class="alert upgrade-alert">
     <i class="material-icons">info_outline</i>
     <div class="alert-body">
       {{ featureName }} needs a paid license

@@ -14,7 +14,7 @@
         />
         <auto-updater />
         <notification-manager />
-        <upgrade-required-modal />
+        <upgrade-required-modal v-if="!hideUpsells" />
       </template>
     </div>
     <portal-target
@@ -45,7 +45,7 @@
     <input-ephemeral-modal name="input-ephemeral-modal" />
     <util-died-modal />
     <share-modal />
-    <template v-if="licensesInitialized">
+    <template v-if="licensesInitialized && !hideUpsells">
       <trial-ended-modal />
       <license-expired-modal />
       <lifetime-license-expired-modal />
@@ -147,6 +147,7 @@ export default Vue.extend({
     ...mapGetters({
       'isTrial': 'isTrial',
       'isUltimate': 'isUltimate',
+      'hideUpsells': 'hideUpsells',
     }),
     editorFontSize() {
       return this.$store.state.settings?.settings?.editorFontSize?.value || 14
@@ -217,7 +218,7 @@ export default Vue.extend({
   methods: {
     notifyFreeTrial() {
       Noty.closeAll('trial')
-      if (this.isTrial && this.isUltimate) {
+      if (this.isTrial && this.isUltimate && !this.hideUpsells) {
         const ta = new TimeAgo('en-US')
         const validUntil = this.status.license.validUntil
         const options = {
@@ -253,6 +254,7 @@ export default Vue.extend({
       // also what lets a trial end announced by an older version be told
       // apart from one that lapsed unseen (adoptLegacyTrialEndDecision).
       if (status?.isTrial) return
+      if (this.hideUpsells) return
       if (SmartLocalStorage.getBool('expiredLicenseEventsEmitted', false)) return
 
       const isValidDateExpired = compare ? !prev.isValidDateExpired && curr.isValidDateExpired : this.status.isValidDateExpired

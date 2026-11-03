@@ -121,7 +121,7 @@ export default Vue.extend({
     };
   },
   computed: {
-    ...mapGetters(["isCommunity"]),
+    ...mapGetters(["isCommunity", "hideLockedFeatures"]),
     rootBindings(): RootBinding[] {
       return [
         { event: AppEvent.openConnectionTypePickerModal, handler: this.open },
@@ -134,6 +134,7 @@ export default Vue.extend({
           isCommunity: !isUltimateType(type.value),
           lockedByLicense: this.isCommunity && isUltimateType(type.value),
         }))
+        .filter((type) => !(this.hideLockedFeatures && type.lockedByLicense))
         .sort((a, b) => Number(b.isCommunity) - Number(a.isCommunity));
     },
     filteredTypes(): Type[] {

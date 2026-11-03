@@ -1,7 +1,7 @@
 <template>
   <!-- This component is responsible for showing buttons based on user subscription status -->
   <!-- For example - can they start a trial? -->
-  <div class="upsell-buttons">
+  <div v-if="!$store.getters.hideUpsells" class="upsell-buttons">
     <div
       v-if="isSupportDateExpired"
       class="alert alert-warning"
