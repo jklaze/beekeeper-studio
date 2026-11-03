@@ -22,6 +22,30 @@ Most of the code in this repo is open source under the GPLv3 license. Paid featu
 We welcome community contributions!
 
 
+## Community-Enforced Mode (this fork)
+
+This fork ships with a **community-enforced mode** that keeps the app free of upgrade prompts and cloud features while no paid license key is entered. It does not unlock paid features: paid-only entry points are hidden instead.
+
+When enabled (the default):
+
+- No upgrade toasts, trial notifications, upgrade-required dialogs or trial/license-expired dialogs
+- No "Upgrade" button, connection-screen pitch or "Free Version" window-title suffix
+- Upgrade panels show a short "not available in the Community Edition" note instead of a sales pitch
+- Paid-only menu items and options are hidden: premium database types, IAM / Azure / Kerberos sign-in, import from file, query to file, dry run, editable query results, quick filter, more than two table filters and multi-table export
+- Cloud workspaces are hidden, and the paid AI Shell and ER Diagram plugins are not loaded
+
+To restore the stock behaviour, add this to `user.config.ini`:
+
+```ini
+[general]
+hideUpsells = false
+```
+
+The mode turns itself off automatically once a paid license key is entered.
+
+> Note: the app entry points live in `src-commercial/`, which is covered by the [commercial license](LICENSE-COMMERCIAL.md). Review it before building and using this fork.
+
+
 ## Supported Databases
 
 <!-- Don't edit this, it gets built automatically from docs/includes/supported_databases.md -->
